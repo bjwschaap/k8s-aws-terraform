@@ -1,0 +1,42 @@
+#cloud-config
+preserve_hostname: false
+hostname: ${hostname}
+fqdn: ${hostname}.${domain}
+manage_etc_hosts: false
+
+repo_update: true
+repo_upgrade: all
+package_upgrade: true
+packages:
+- NetworkManager
+
+cloud_config_modules:
+- runcmd
+- package_update_upgrade_install
+
+runcmd:
+- [ systemctl, daemon-reload ]
+- [ systemctl, restart, systemd-hostnamed]
+- [ systemctl, enable, NetworkManager.service ]
+- [ systemctl, start, --no-block, NetworkManager.service ]
+
+write_files:
+- content: |
+    DEVS='/dev/xvdb'
+    VG=docker_vol
+    DATA_SIZE=95%VG
+    STORAGE_DRIVER=overlay2
+    CONTAINER_ROOT_LV_NAME=dockerlv
+    CONTAINER_ROOT_LV_MOUNT_PATH=/var/lib/docker
+    CONTAINER_ROOT_LV_SIZE=100%FREE
+    ROOT_SIZE=45G
+    GROWPART=true
+  path: /etc/sysconfig/docker-storage-setup
+  owner: root:root
+
+users:
+- default
+
+system_info:
+  default_user:
+    name: ec2-user
