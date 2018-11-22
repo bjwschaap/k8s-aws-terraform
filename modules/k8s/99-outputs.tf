@@ -11,5 +11,5 @@ output "bastion-private_ip" {
   value = "${aws_instance.bastion_node.private_ip}"
 }
 output "master-public_dns" {
-  value = "${aws_route53_record.openshift-master.name}"
+  value = "${aws_route53_record.k8s-master.name}"
 }

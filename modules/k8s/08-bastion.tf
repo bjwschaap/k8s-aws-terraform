@@ -28,7 +28,7 @@ resource "aws_instance" "bastion_node" {
 
   tags {
     Name    = "bastion.${data.aws_route53_zone.selected.name}"
-    Project = "openshift"
+    Project = "k8s"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_eip" "bastion" {
 
   tags {
     Name    = "${var.vpc_name}-bastion-eip"
-    Project = "openshift"
+    Project = "k8s"
   }
 }
 

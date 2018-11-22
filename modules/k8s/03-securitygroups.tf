@@ -321,7 +321,7 @@ resource "aws_security_group_rule" "node_kubelet_node_ingress" {
 }
 
 // Calico BGP between workers (in case it's used..)
-resource "aws_security_group_rule" "node_kubelet_node_ingress" {
+resource "aws_security_group_rule" "node_bgp_node_ingress" {
   security_group_id        = "${aws_security_group.node_sg.id}"
   type                     = "ingress"
   from_port                = "179"

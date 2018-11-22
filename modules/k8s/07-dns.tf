@@ -7,7 +7,9 @@ data "aws_route53_zone" "selected" {
 resource "aws_route53_zone" "k8s_reverse" {
   name          = "${format("%s.%s.in-addr.arpa", element(split(".", var.vpc_cidr), 1), element(split(".", var.vpc_cidr), 0))}"
   comment       = "k8s Reverse Private DNS Zone"
-  vpc_id        = "${aws_vpc.k8s.id}"
+  vpc {
+    vpc_id      = "${aws_vpc.k8s.id}"
+  }
 }
 
 // Record pointing to the external ELB for the k8s Masters
