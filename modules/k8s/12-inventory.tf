@@ -2,7 +2,7 @@
 // installation.
 data "template_file" "master_entries" {
   count = "${var.master_node_count}"
-  template = "$${hostname} k8s_node_labels=\"{'role': 'master'}\" k8s_hostname=$${private_dns}"
+  template = "$${hostname} k8s_node_labels=\"{'role': 'master'}\""
   vars {
     hostname    = "${element(aws_instance.master_nodes.*.tags.Name, count.index)}"
     private_dns = "${element(aws_instance.master_nodes.*.private_dns, count.index)}"
@@ -11,7 +11,7 @@ data "template_file" "master_entries" {
 
 data "template_file" "infra_entries" {
   count = "${var.infra_node_count}"
-  template = "$${hostname} k8s_node_labels=\"{'role': 'infra', 'region': 'infra'}\" k8s_hostname=$${private_dns}"
+  template = "$${hostname} k8s_node_labels=\"{'role': 'etcd'}\" etcd_member_name=etcd$${count.index + 1}"
   vars {
     hostname    = "${element(aws_instance.infra_nodes.*.tags.Name, count.index)}"
     private_dns = "${element(aws_instance.infra_nodes.*.private_dns, count.index)}"
@@ -20,7 +20,7 @@ data "template_file" "infra_entries" {
 
 data "template_file" "app_entries" {
   count = "${var.app_node_count}"
-  template = "$${hostname} k8s_node_labels=\"{'role': 'app'}\" k8s_hostname=$${private_dns}"
+  template = "$${hostname} k8s_node_labels=\"{'role': 'app'}\""
   vars {
     hostname    = "${element(aws_instance.app_nodes.*.tags.Name, count.index)}"
     private_dns = "${element(aws_instance.app_nodes.*.private_dns, count.index)}"
@@ -48,8 +48,8 @@ data "template_file" "inventory" {
   }
 }
 
-//  Create the inventory.
+//  Create the inventory file for Kubespray.
 resource "local_file" "inventory" {
   content     = "${data.template_file.inventory.rendered}"
-  filename = "${path.cwd}/inventory.cfg"
+  filename = "${path.cwd}/hosts.ini"
 }

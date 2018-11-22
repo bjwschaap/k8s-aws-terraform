@@ -60,7 +60,7 @@ resource "aws_instance" "infra_nodes" {
     Name                                     = "k8s-infra-${count.index + 1}.${var.public_hosted_zone}"
     Project                                  = "k8s"
     k8s-role                                 = "infra"
-    kubespray-role                           = "etcd"
+    kubespray-role                           = "etcd,calico-rr"
     KubernetesCluster                        = "${var.stackname}"
     "kubernetes.io/cluster/${var.stackname}" = "${var.stackname}-${var.region}"
   }

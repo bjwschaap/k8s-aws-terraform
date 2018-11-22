@@ -10,6 +10,7 @@
 
 # Inventory
 inventory.cfg
+hosts.ini
 
 # IDEs
 .vscode
