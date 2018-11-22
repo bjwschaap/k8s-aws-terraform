@@ -19,12 +19,12 @@ variable "master_instance_type" {
 
 variable "master_api_port" {
   description = "The K8S API port"
-  default     = 443
+  default     = 6443
 }
 
 variable "master_health_target" {
   description = "The health api endpoint for the master node"
-  default     = "TCP:443"
+  default     = "TCP:6443"
 }
 
 variable "node_instance_type" {
